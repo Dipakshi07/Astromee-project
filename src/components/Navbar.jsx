@@ -8,26 +8,43 @@ const navLinks = [
 ];
 
 export default function Navbar({ onNavigate, activePage }) {
+  const handleNavigation = (page) => {
+    // Parent App.jsx ko active page batayega
+    if (onNavigate) {
+      onNavigate(page);
+    }
+
+    // Page ke respective section par smooth scroll
+    const section = document.getElementById(page);
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-astro-border">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="flex items-center justify-between px-4 md:px-8 py-3 max-w-[1440px] mx-auto">
 
         {/* Logo */}
         <button
-          onClick={() => onNavigate("home")}
+          onClick={() => handleNavigation("home")}
           className="flex items-center gap-3 text-left"
         >
-          <div className="h-11 w-11 rounded-xl border-2 border-astro-orange flex items-center justify-center font-display font-bold text-lg text-astro-orange">
+          <div className="h-11 w-11 rounded-xl border-2 border-orange-500 flex items-center justify-center font-bold text-lg text-orange-500">
             A
           </div>
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-xl text-astro-orange tracking-wide">
+              <span className="font-bold text-xl text-orange-500 tracking-wide">
                 ASTROMEE
               </span>
 
-              <span className="bg-astro-orange text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <span className="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 PRO
               </span>
             </div>
@@ -38,17 +55,22 @@ export default function Navbar({ onNavigate, activePage }) {
           </div>
         </button>
 
-        {/* Nav links */}
+        {/* Navigation */}
         <nav className="hidden lg:flex items-center gap-7">
           {navLinks.map((link) => (
             <button
               key={link.label}
-              onClick={() => onNavigate(link.page)}
-              className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                activePage === link.page
-                  ? "text-astro-orange"
-                  : "text-gray-700 hover:text-astro-orange"
-              }`}
+              onClick={() => handleNavigation(link.page)}
+              className={`
+                relative flex items-center gap-1.5
+                text-sm font-medium
+                transition-all duration-300
+                ${
+                  activePage === link.page
+                    ? "text-orange-500"
+                    : "text-gray-700 hover:text-orange-500"
+                }
+              `}
             >
               <span>{link.icon}</span>
 
@@ -59,6 +81,11 @@ export default function Navbar({ onNavigate, activePage }) {
               )}
 
               <span className="text-[10px]">⌄</span>
+
+              {/* Active underline */}
+              {activePage === link.page && (
+                <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-orange-500 rounded-full" />
+              )}
             </button>
           ))}
         </nav>
@@ -67,7 +94,7 @@ export default function Navbar({ onNavigate, activePage }) {
         <div className="flex items-center gap-3">
 
           {/* Balance */}
-          <div className="hidden sm:flex items-center gap-2 border border-astro-orange/40 bg-amber-50 rounded-full pl-3 pr-1 py-1">
+          <div className="hidden sm:flex items-center gap-2 border border-orange-300 bg-amber-50 rounded-full pl-3 pr-1 py-1">
             <span className="text-lg">🪙</span>
 
             <div className="leading-tight">
@@ -80,18 +107,18 @@ export default function Navbar({ onNavigate, activePage }) {
               </p>
             </div>
 
-            <button className="ml-1 bg-astro-orange text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-astro-orange-dark transition-colors">
+            <button className="ml-1 bg-orange-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-orange-600 transition-colors">
               + Topup
             </button>
           </div>
 
           {/* Spin */}
-          <button className="hidden sm:flex items-center gap-1 border border-astro-orange/40 text-astro-orange text-sm font-semibold px-3 py-2 rounded-full hover:bg-amber-50 transition-colors">
+          <button className="hidden sm:flex items-center gap-1 border border-orange-300 text-orange-500 text-sm font-semibold px-3 py-2 rounded-full hover:bg-amber-50 transition-colors">
             ⚙️ Spin
           </button>
 
           {/* Profile */}
-          <button className="relative h-10 w-10 rounded-full border-2 border-astro-orange flex items-center justify-center text-astro-orange">
+          <button className="relative h-10 w-10 rounded-full border-2 border-orange-500 flex items-center justify-center text-orange-500">
             👤
 
             <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-red-500 border border-white" />
